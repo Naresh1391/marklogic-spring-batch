@@ -41,6 +41,9 @@ public abstract class AbstractJobTest extends AbstractSpringTest {
     @Autowired
     protected DatabaseClientProvider databaseClientProvider;
 
+    @Autowired
+    protected DatabaseClientConfig databaseClientConfig;
+
     protected ClientTestHelper clientTestHelper;
 
     /**
@@ -158,7 +161,7 @@ public abstract class AbstractJobTest extends AbstractSpringTest {
     }
 
     protected boolean isMarkLogic9() {
-        AdminConfig config = new AdminConfig(getClient().getHost(), getClient().getPassword());
+        AdminConfig config = new AdminConfig(databaseClientConfig.getHost(), databaseClientConfig.getPassword());
         AdminManager mgr = new AdminManager(config);
         return mgr.getServerVersion().startsWith("9");
     }

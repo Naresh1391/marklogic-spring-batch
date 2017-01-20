@@ -2,7 +2,6 @@ package com.marklogic.spring.batch.config;
 
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.helper.DatabaseClientProvider;
-import com.marklogic.spring.batch.core.explore.support.MarkLogicJobExplorerFactoryBean;
 import com.marklogic.spring.batch.core.repository.MarkLogicSimpleJobRepository;
 import com.marklogic.spring.batch.core.repository.dao.MarkLogicExecutionContextDao;
 import com.marklogic.spring.batch.core.repository.dao.MarkLogicJobExecutionDao;
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.explore.support.MapJobExplorerFactoryBean;
+import org.springframework.batch.core.explore.support.SimpleJobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
@@ -33,12 +33,21 @@ public class MarkLogicBatchConfigurer implements BatchConfigurer {
     private JobExplorer jobExplorer;
     private JobLauncher jobLauncher;
     private PlatformTransactionManager transactionManager;
-    
+
+    private MarkLogicJobInstanceDao jobInstanceDao;
+    private MarkLogicJobExecutionDao jobExecutionDao;
+    private MarkLogicStepExecutionDao stepExecutionDao;
+    private MarkLogicExecutionContextDao executionDao;
+
     protected MarkLogicBatchConfigurer() {}
     
     @Autowired
     public MarkLogicBatchConfigurer(DatabaseClientProvider databaseClientProvider) {
         this.databaseClient = databaseClientProvider.getDatabaseClient();
+        jobInstanceDao = new MarkLogicJobInstanceDao(databaseClient);
+        jobExecutionDao = new MarkLogicJobExecutionDao(databaseClient);
+        stepExecutionDao = new MarkLogicStepExecutionDao(databaseClient, jobExecutionDao);
+        executionDao = new MarkLogicExecutionContextDao(jobExecutionDao, stepExecutionDao);
     }
     
     @PostConstruct
@@ -66,18 +75,11 @@ public class MarkLogicBatchConfigurer implements BatchConfigurer {
     }
     
     protected JobRepository createJobRepository() throws Exception {
-        MarkLogicJobInstanceDao jobInstanceDao = new MarkLogicJobInstanceDao(databaseClient);
-        MarkLogicJobExecutionDao jobExecutionDao = new MarkLogicJobExecutionDao(databaseClient);
-        MarkLogicStepExecutionDao stepExecutionDao = new MarkLogicStepExecutionDao(databaseClient, jobExecutionDao);
-        MarkLogicExecutionContextDao executionDao = new MarkLogicExecutionContextDao(jobExecutionDao, stepExecutionDao);
         return new MarkLogicSimpleJobRepository(jobInstanceDao, jobExecutionDao, stepExecutionDao, executionDao);
     }
     
     protected JobExplorer createJobExplorer() throws Exception {
-        MarkLogicJobExplorerFactoryBean factory = new MarkLogicJobExplorerFactoryBean();
-        factory.setDatabaseClient(databaseClient);
-        factory.afterPropertiesSet();
-        return factory.getObject();
+        return new SimpleJobExplorer(jobInstanceDao, jobExecutionDao, stepExecutionDao, executionDao);
     }
     
     protected JobLauncher createJobLauncher() throws Exception {

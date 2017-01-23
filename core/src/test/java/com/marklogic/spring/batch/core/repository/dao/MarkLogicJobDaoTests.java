@@ -3,7 +3,7 @@ package com.marklogic.spring.batch.core.repository.dao;
 import java.util.Date;
 import java.util.List;
 
-import com.marklogic.spring.batch.AbstractSpringBatchTest;
+import com.marklogic.spring.batch.AbstractSpringBatchCoreTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.core.BatchStatus;
@@ -12,10 +12,11 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.dao.NoSuchObjectException;
 import org.springframework.transaction.annotation.Transactional;
 
-public class MarkLogicJobDaoTests extends AbstractSpringBatchTest {
+public class MarkLogicJobDaoTests extends AbstractSpringBatchCoreTest {
 	
 	protected JobParameters jobParameters = new JobParametersBuilder().addString("job.key", "jobKey").addLong("long",
 			(long) 1).addDate("date", new Date(7)).addDouble("double", 7.7).toJobParameters();
@@ -25,13 +26,12 @@ public class MarkLogicJobDaoTests extends AbstractSpringBatchTest {
 	protected String jobName = "Job1";
 
 	protected JobExecution jobExecution;
+	protected JobRepository jobRepository;
 
 	protected Date jobExecutionStartTime = new Date(System.currentTimeMillis());
 	
 	@Before
 	public void onSetUpInTransaction() throws Exception {
-		initializeJobRepository();
-		
 		// Create job.
 		jobInstance = getJobInstanceDao().createJobInstance(jobName, jobParameters);
 

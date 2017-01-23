@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.marklogic.spring.batch.AbstractSpringBatchCoreTest;
-import com.marklogic.spring.batch.AbstractSpringBatchTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Ignore;

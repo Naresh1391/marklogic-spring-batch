@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MarkLogicApplicationContext.class})
+@ContextConfiguration(classes = { ApplicationContext.class } )
 public class MainConfigTest extends Assert {
 
     @Autowired

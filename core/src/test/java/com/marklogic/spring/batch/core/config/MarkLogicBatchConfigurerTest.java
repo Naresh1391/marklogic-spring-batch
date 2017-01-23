@@ -1,8 +1,6 @@
 package com.marklogic.spring.batch.core.config;
 
 import com.marklogic.client.helper.LoggingObject;
-import com.marklogic.spring.batch.config.MarkLogicApplicationContext;
-import com.marklogic.spring.batch.config.MarkLogicBatchConfigurer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -16,7 +14,7 @@ import org.springframework.util.Assert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @EnableBatchProcessing
-@ContextConfiguration(classes = { MarkLogicBatchConfigurer.class, MarkLogicApplicationContext.class } )
+@ContextConfiguration(classes = { com.marklogic.spring.batch.ApplicationContext.class } )
 public class MarkLogicBatchConfigurerTest extends LoggingObject implements ApplicationContextAware {
     
     ApplicationContext ctx;
@@ -26,7 +24,7 @@ public class MarkLogicBatchConfigurerTest extends LoggingObject implements Appli
         for (String beanName : ctx.getBeanDefinitionNames()) {
             logger.info(beanName);
         }
-        Assert.isTrue(ctx.containsBeanDefinition("markLogicBatchConfigurer"));
+        Assert.isTrue(ctx.containsBeanDefinition("marklogicBatchConfigurer"));
     }
     
     @Override

@@ -3,6 +3,7 @@ package com.marklogic.spring.batch.core.repository.dao;
 import java.util.Date;
 import java.util.List;
 
+import com.marklogic.spring.batch.AbstractSpringBatchCoreTest;
 import com.marklogic.spring.batch.AbstractSpringBatchTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
-public class MarkLogicJobInstanceDaoTests extends AbstractSpringBatchTest {
+public class MarkLogicJobInstanceDaoTests extends AbstractSpringBatchCoreTest {
 
 	private static final long DATE = 777;
 	
@@ -20,11 +21,6 @@ public class MarkLogicJobInstanceDaoTests extends AbstractSpringBatchTest {
 	private JobParameters fooParams = new JobParametersBuilder().addString("stringKey", "stringValue")
 			.addLong("longKey", Long.MAX_VALUE).addDouble("doubleKey", Double.MAX_VALUE)
 			.addDate("dateKey", new Date(DATE)).toJobParameters();
-
-	@Before
-	public void onSetUp() throws Exception {
-		initializeJobRepository();
-	}
 
 	/*
 	 * Create and retrieve a job instance.

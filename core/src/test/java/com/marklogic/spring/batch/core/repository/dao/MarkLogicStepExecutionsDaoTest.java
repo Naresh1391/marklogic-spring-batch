@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import com.marklogic.spring.batch.AbstractSpringBatchCoreTest;
 import com.marklogic.spring.batch.AbstractSpringBatchTest;
 
 import org.junit.Before;
@@ -21,7 +22,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
 import com.marklogic.spring.batch.core.step.StepSupport;
 
-public class MarkLogicStepExecutionsDaoTest extends AbstractSpringBatchTest {
+public class MarkLogicStepExecutionsDaoTest extends AbstractSpringBatchCoreTest {
 	
 	protected JobInstance jobInstance;
 	protected JobExecution jobExecution;
@@ -30,8 +31,7 @@ public class MarkLogicStepExecutionsDaoTest extends AbstractSpringBatchTest {
 
 	@Before
 	public void onSetUp() throws Exception {
-		initializeJobRepository();
-		jobExecution = getJobRepository().createJobExecution("job", new JobParameters());
+		jobExecution = getMarklogicBatchConfigurer().getJobRepository().createJobExecution("job", new JobParameters());
 		jobInstance = jobExecution.getJobInstance();
 		step = new StepSupport("foo");
 		stepExecution = new StepExecution(step.getName(), jobExecution);

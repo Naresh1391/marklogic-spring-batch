@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.marklogic.spring.batch.AbstractSpringBatchCoreTest;
 import com.marklogic.spring.batch.AbstractSpringBatchTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,18 +14,19 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.transaction.annotation.Transactional;
 
-public class MarkLogicExecutionContextDaoTests extends AbstractSpringBatchTest {
+public class MarkLogicExecutionContextDaoTests extends AbstractSpringBatchCoreTest {
 
+	private JobRepository jobRepository;
 	private JobExecution jobExecution;
-
 	private StepExecution stepExecution;
 
 	@Before
-	public void setUp() {
-		initializeJobRepository();
+	public void setUp() throws Exception {
+		jobRepository = getMarklogicBatchConfigurer().getJobRepository();
 		JobInstance ji = getJobInstanceDao().createJobInstance("testJob", new JobParameters());
 		jobExecution = new JobExecution(ji, new JobParameters());
 		getJobExecutionDao().saveJobExecution(jobExecution);

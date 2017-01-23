@@ -1,13 +1,13 @@
 package com.marklogic.spring.batch;
 
-import com.marklogic.client.DatabaseClientFactory;
 import com.marklogic.client.helper.DatabaseClientConfig;
 import com.marklogic.client.helper.DatabaseClientProvider;
 import com.marklogic.client.helper.LoggingObject;
 import com.marklogic.client.spring.SimpleDatabaseClientProvider;
 import com.marklogic.spring.batch.config.MarkLogicApplicationContext;
-import com.marklogic.spring.batch.config.support.BatchDatabaseClientProvider;
+import com.marklogic.spring.batch.config.MarkLogicBatchConfigurer;
 import com.marklogic.xcc.template.XccTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EnvironmentAware;
@@ -25,7 +25,15 @@ public class ApplicationContext extends LoggingObject implements EnvironmentAwar
 
     private Environment env;
 
+    @Bean
+    @Qualifier("jobRepoDatabaseClientProvider")
+    public MarkLogicBatchConfigurer marklogicBatchConfigurer(
+            DatabaseClientProvider databaseClientProvider) {
+        return new MarkLogicBatchConfigurer(databaseClientProvider);
+    }
+
     @Bean(name = "databaseClientProvider")
+    @Qualifier(value = "targetDatabaseClientProvider")
     public DatabaseClientProvider databaseClientProvider(
             @Value("${marklogic.host:localhost}") String host,
             @Value("${marklogic.port}") int port,
@@ -39,7 +47,8 @@ public class ApplicationContext extends LoggingObject implements EnvironmentAwar
     }
 
 
-    @Bean(name = "jobRepositoryDatabaseClientProvider")
+    @Bean
+    @Qualifier(value = "jobRepoDatabaseClientProvider")
     public DatabaseClientProvider jobRepositoryDatabaseClientProvider(
             @Value("${marklogic.jobrepository.host:localhost}") String host,
             @Value("${marklogic.jobrepository.port}") int port,
@@ -73,7 +82,6 @@ public class ApplicationContext extends LoggingObject implements EnvironmentAwar
                         host,
                         database));
     }
-
 
     @Override
     public void setEnvironment(Environment environment) {

@@ -25,7 +25,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.PostConstruct;
 
-@Component
 public class MarkLogicBatchConfigurer implements BatchConfigurer {
     
     private final static Logger logger = LoggerFactory.getLogger(MarkLogicBatchConfigurer.class);
@@ -41,9 +40,8 @@ public class MarkLogicBatchConfigurer implements BatchConfigurer {
     private MarkLogicExecutionContextDao executionDao;
 
     protected MarkLogicBatchConfigurer() {}
-    
-    @Autowired
-    public MarkLogicBatchConfigurer(@Qualifier("jobRepositoryDatabaseClientProvider") DatabaseClientProvider databaseClientProvider) {
+
+    public MarkLogicBatchConfigurer(DatabaseClientProvider databaseClientProvider) {
         this.databaseClient = databaseClientProvider.getDatabaseClient();
         jobInstanceDao = new MarkLogicJobInstanceDao(databaseClient);
         jobExecutionDao = new MarkLogicJobExecutionDao(databaseClient);

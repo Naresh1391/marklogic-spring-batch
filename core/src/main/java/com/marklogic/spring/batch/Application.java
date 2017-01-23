@@ -5,11 +5,13 @@ import com.marklogic.spring.batch.config.MarkLogicBatchConfigurer;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
+import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -148,11 +150,17 @@ public class Application extends LoggingObject implements EnvironmentAware, Appl
         Assert.state(jobExplorer != null,
                 "A JobExplorer must be provided for a restart or start next operation.  Please add one to the configuration.");
         Assert.state(jobRegistry != null, "A JobRegistry must be provided");
+
         for (String jobName : jobRegistry.getJobNames()) {
             logger.info(jobName);
         }
-        String jobName = jobIdentifier;
-
+        String jobName = "yourJobABC";
+        Job job = null;
+        try {
+            job = jobRegistry.getJob(jobName);
+            logger.info("FOUND");
+        } catch (NoSuchJobException e) {
+        }
 
         return 1;
     }

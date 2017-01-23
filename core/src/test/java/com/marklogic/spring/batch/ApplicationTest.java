@@ -5,8 +5,8 @@ import org.junit.Test;
 public class ApplicationTest {
 
     @Test
-    public void commandLineTest() {
-        String[] args = {"--marklogic.username", "bigbird", "--marklogic.jobrepository.host", "oscar"};
+    public void commandLineTest() throws Exception {
+        String[] args = {"--job", "YourJob", "--marklogic.jobrepository.host", "oscar"};
         Application.main(args);
     }
 }

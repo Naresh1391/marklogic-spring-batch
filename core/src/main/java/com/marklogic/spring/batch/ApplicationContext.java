@@ -7,6 +7,7 @@ import com.marklogic.client.spring.SimpleDatabaseClientProvider;
 import com.marklogic.spring.batch.config.MarkLogicApplicationContext;
 import com.marklogic.spring.batch.config.MarkLogicBatchConfigurer;
 import com.marklogic.xcc.template.XccTemplate;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 
 @Configuration
+@EnableBatchProcessing
 @ComponentScan(
         basePackages = { "com.marklogic.spring.batch" },
         excludeFilters = { @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {MarkLogicApplicationContext.class})}

@@ -2,12 +2,24 @@ package com.marklogic.spring.batch;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
 
-public class ReadCommandLineOptionsFromTest extends AbstractSpringBatchTest {
+public class ReadCommandLineOptionsFromTest extends com.marklogic.spring.batch.AbstractSpringBatchCoreTest {
 
+    @Test
+    public void readJobNameTest() {
+        String[] args = new String[] { "--job", "dummyJob123" };
+        Application app = new Application();
+        OptionParser parser = app.buildOptionParser();
+        OptionSet options = parser.parse(args);
+        assertEquals("dummyJob123", options.valueOf(Options.JOB));
+    }
+
+
+    @Ignore
     @Test
     public void recognizedAndUnrecognizedOptionsInOptionsFile() {
         String[] args = new String[]{
@@ -15,8 +27,9 @@ public class ReadCommandLineOptionsFromTest extends AbstractSpringBatchTest {
                 "--custom", "value",
                 "--options_file", "src/test/resources/options/sample-options.properties"};
 
-        Main main = new Main();
-        OptionSet options = main.parseOptions(main.buildOptionParser(), args);
+        Application main = new Application();
+        OptionParser parser = main.buildOptionParser();
+        OptionSet options = parser.parse(args);
         assertEquals("test", options.valueOf(Options.JOB));
         assertEquals("some-host", options.valueOf(Options.HOST));
 
@@ -41,4 +54,5 @@ public class ReadCommandLineOptionsFromTest extends AbstractSpringBatchTest {
             assertNotNull(e.getMessage());
         }
     }
+
 }

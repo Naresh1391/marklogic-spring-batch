@@ -28,13 +28,13 @@ public class ApplicationContext extends LoggingObject implements EnvironmentAwar
     @Bean(name = "databaseClientProvider")
     public DatabaseClientProvider databaseClientProvider(
             @Value("${marklogic.host:localhost}") String host,
-            @Value("${marklogic.port:8000}") int port,
+            @Value("${marklogic.port}") int port,
             @Value("${marklogic.username:admin}") String username,
             @Value("${marklogic.password:admin}") String password,
             @Value("${marklogic.database:Documents}") String database) {
         DatabaseClientConfig databaseClientConfig = new DatabaseClientConfig(host, port, username, password);
         databaseClientConfig.setDatabase(database);
-        logger.info("Target Database Config: " + username + ":" + host + ":" + port + "/" + database);
+        logger.info("Target Database Config: " + username + "@" + host + ":" + port + "/" + database);
         return new SimpleDatabaseClientProvider(databaseClientConfig);
     }
 
@@ -42,13 +42,13 @@ public class ApplicationContext extends LoggingObject implements EnvironmentAwar
     @Bean(name = "jobRepositoryDatabaseClientProvider")
     public DatabaseClientProvider jobRepositoryDatabaseClientProvider(
             @Value("${marklogic.jobrepository.host:localhost}") String host,
-            @Value("${marklogic.jobrepository.port:8000}") int port,
+            @Value("${marklogic.jobrepository.port}") int port,
             @Value("${marklogic.jobrepository.username:admin}") String username,
             @Value("${marklogic.jobrepository.password:admin}") String password,
             @Value("${marklogic.jobrepository.database:Documents}") String database) {
         DatabaseClientConfig databaseClientConfig = new DatabaseClientConfig(host, port, username, password);
         databaseClientConfig.setDatabase(database);
-        logger.info("JobRepo Database Config: " + username + ":" + host + ":" + port + "/" + database);
+        logger.info("JobRepo Database Config: " + username + "@" + host + ":" + port + "/" + database);
         return new SimpleDatabaseClientProvider(databaseClientConfig);
     }
 

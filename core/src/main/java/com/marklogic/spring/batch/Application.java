@@ -22,8 +22,8 @@ public class Application extends LoggingObject {
 
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
         JOptCommandLinePropertySource ps = new JOptCommandLinePropertySource(options);
-        ctx.register(ApplicationContext.class);
         ctx.getEnvironment().getPropertySources().addFirst(ps);
+        ctx.register(ApplicationContext.class);
         ctx.refresh();
 
         for (OptionSpec spec : options.specs()) {
@@ -40,7 +40,7 @@ public class Application extends LoggingObject {
         OptionParser parser = new OptionParser();
         parser.acceptsAll(Arrays.asList("h", Options.HELP), "Show help").forHelp();
         parser.accepts(Options.HOST, "Hostname of the destination MarkLogic Server").withRequiredArg().defaultsTo("localhost");
-        parser.accepts(Options.PORT, "Port number of the destination MarkLogic Server. There should be an XDBC App Server on this port. The App Server must not be SSL-enabled.").withRequiredArg().ofType(Integer.class).defaultsTo(8000);
+        parser.accepts(Options.PORT, "Port number of the destination MarkLogic Server. There should be an XDBC App Server on this port. The App Server must not be SSL-enabled.").withRequiredArg().ofType(Integer.class);
         parser.accepts(Options.USERNAME, "The MarkLogic user to authenticate as against the given host and port").withRequiredArg().defaultsTo("admin");
         parser.accepts(Options.PASSWORD, "The password for the MarkLogic user").withRequiredArg();
         parser.accepts(Options.DATABASE, "The name of the destination database. Default: The database associated with the destination App Server identified by -host and -port.").withRequiredArg();
@@ -55,7 +55,7 @@ public class Application extends LoggingObject {
 
         parser.accepts(Options.JOB_REPOSITORY_NAME, "Name of the REST API server for the MarkLogic JobRepository").withRequiredArg();
         parser.accepts(Options.JOB_REPOSITORY_HOST, "Hostname of the MarkLogic Server for the JobRepository").withRequiredArg();
-        parser.accepts(Options.JOB_REPOSITORY_PORT, "Port number of the App Server for the JobRepository. The App Server must not be SSL-enabled.").withRequiredArg().ofType(Integer.class).defaultsTo(8000);
+        parser.accepts(Options.JOB_REPOSITORY_PORT, "Port number of the App Server for the JobRepository. The App Server must not be SSL-enabled.").withRequiredArg().ofType(Integer.class);
         parser.accepts(Options.JOB_REPOSITORY_USERNAME, "The MarkLogic user to authenticate as against JobRepository App Server").withRequiredArg().defaultsTo("admin");
         parser.accepts(Options.JOB_REPOSITORY_PASSWORD, "The password for the JobRepository MarkLogic user").withRequiredArg();
         parser.accepts(Options.JOB_REPOSITORY_DATABASE, "The name of the JobRepository database. Default: The database associated with the destination App Server identified by -jrHost and -jrPort.").withRequiredArg();

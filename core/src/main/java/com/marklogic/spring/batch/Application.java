@@ -4,6 +4,7 @@ package com.marklogic.spring.batch;
 import com.marklogic.client.helper.LoggingObject;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.JOptCommandLinePropertySource;
 
@@ -20,21 +21,17 @@ public class Application extends LoggingObject {
         OptionSet options = parser.parse(args);
 
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-        ctx.register(ApplicationContext.class);
         JOptCommandLinePropertySource ps = new JOptCommandLinePropertySource(options);
-        String configClass = ps.getProperty(Options.CONFIG);
-
-        if (configClass != null) {
-            try {
-                ctx.register(Class.forName(configClass));
-            } catch (Exception e) {
-                throw new RuntimeException("Unable to register config for class: " + configClass, e);
-            }
-        }
+        ctx.register(ApplicationContext.class);
         ctx.getEnvironment().getPropertySources().addFirst(ps);
         ctx.refresh();
-        logger.info(options.valueOf("host").toString());
-        logger.info(options.valueOf("port").toString());
+
+        for (OptionSpec spec : options.specs()) {
+            Object value = options.valueOf(spec);
+            Object name = spec.options().get(0);
+            logger.info(name.toString() + "=" + value.toString());
+        }
+
 
         logger.info("COMPLETE");
     }

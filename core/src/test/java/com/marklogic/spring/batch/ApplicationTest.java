@@ -7,7 +7,7 @@ public class ApplicationTest {
 
     @Test
     public void commandLineTest() {
-        String[] args = {"--host", "localhost123", "--port", "123"};
+        String[] args = {"--marklogic.host", "localhost", "--marklogic.port", "123"};
         Application.main(args);
     }
 }

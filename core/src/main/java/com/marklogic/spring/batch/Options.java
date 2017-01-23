@@ -8,8 +8,8 @@ public interface Options {
     String HELP = "help";
     String OPTIONS_FILE = "options_file";
 
-    String HOST = "host";
-    String PORT = "port";
+    String HOST = "marklogic.host";
+    String PORT = "marklogic.port";
     String USERNAME = "username";
     String PASSWORD = "password";
     String DATABASE = "database";

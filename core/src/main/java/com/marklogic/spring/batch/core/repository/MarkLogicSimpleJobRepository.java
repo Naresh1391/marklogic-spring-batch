@@ -11,10 +11,8 @@ import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
 import org.springframework.batch.core.repository.support.SimpleJobRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-@Component
 public class MarkLogicSimpleJobRepository extends SimpleJobRepository {
 
 	private StepExecutionDao stepExecutionDao;

@@ -7,6 +7,7 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.BeansException;
@@ -29,6 +30,7 @@ public class Application extends LoggingObject implements EnvironmentAware, Appl
     private org.springframework.context.ApplicationContext context;
     private JobLauncher jobLauncher;
     private JobExplorer jobExplorer;
+    private JobRegistry jobRegistry;
 
     public static void main(String[] args) throws Exception {
         new Application().run(args);
@@ -46,13 +48,14 @@ public class Application extends LoggingObject implements EnvironmentAware, Appl
         ctx.refresh();
         setJobLauncher(ctx.getBean(JobLauncher.class));
         setJobExplorer(ctx.getBean(MarkLogicBatchConfigurer.class).getJobExplorer());
+        setJobRegistry(ctx.getBean(JobRegistry.class));
 
         for (OptionSpec spec : options.specs()) {
             Object value = options.valueOf(spec);
             Object name = spec.options().get(0);
             logger.info(name.toString() + "=" + value.toString());
         }
-        start();
+        start("YourJob");
         logger.info("COMPLETE");
     }
 
@@ -130,16 +133,27 @@ public class Application extends LoggingObject implements EnvironmentAware, Appl
         this.jobExplorer = jobExplorer;
     }
 
+    public void setJobRegistry(JobRegistry jobRegistry) {
+        this.jobRegistry = jobRegistry;
+    }
+
     /*
  * Start a job by obtaining a combined classpath using the job launcher and
  * job paths. If a JobLocator has been set, then use it to obtain an actual
  * job, if not ask the context for it.
  */
     @SuppressWarnings("resource")
-    int start() {
+    int start(String jobIdentifier) {
         Assert.state(jobLauncher != null, "A JobLauncher must be provided.  Please add one to the configuration.");
         Assert.state(jobExplorer != null,
                 "A JobExplorer must be provided for a restart or start next operation.  Please add one to the configuration.");
+        Assert.state(jobRegistry != null, "A JobRegistry must be provided");
+        for (String jobName : jobRegistry.getJobNames()) {
+            logger.info(jobName);
+        }
+        String jobName = jobIdentifier;
+
+
         return 1;
     }
 

@@ -7,7 +7,10 @@ import com.marklogic.client.spring.SimpleDatabaseClientProvider;
 import com.marklogic.spring.batch.config.MarkLogicApplicationContext;
 import com.marklogic.spring.batch.config.MarkLogicBatchConfigurer;
 import com.marklogic.xcc.template.XccTemplate;
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
+import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -83,6 +86,20 @@ public class ApplicationContext extends LoggingObject implements EnvironmentAwar
                         password,
                         host,
                         database));
+    }
+
+    @Bean
+    public MapJobRegistry jobRegistry() throws Exception {
+        return new MapJobRegistry();
+    }
+
+    @Bean
+    public JobRegistryBeanPostProcessor jobRegisterBeanPostProcess(final JobRegistry jobRegistry) throws Exception {
+        return new JobRegistryBeanPostProcessor() {
+            {
+                setJobRegistry(jobRegistry);
+            }
+        };
     }
 
     @Override

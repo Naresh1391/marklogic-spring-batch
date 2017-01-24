@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.Map;
 
 @ContextConfiguration(classes = {ApplicationContext.class} )
-public class AbstractSpringBatchCoreTest extends AbstractSpringTest implements ApplicationContextAware {
+public abstract class AbstractSpringBatchCoreTest extends AbstractSpringTest implements ApplicationContextAware {
 
     private org.springframework.context.ApplicationContext applicationContext;
 

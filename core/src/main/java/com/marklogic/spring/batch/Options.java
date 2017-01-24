@@ -8,19 +8,19 @@ public interface Options {
     String HELP = "help";
     String OPTIONS_FILE = "options_file";
 
-    String HOST = "marklogic.host";
-    String PORT = "marklogic.port";
+    String HOST = "host";
+    String PORT = "port";
     String USERNAME = "marklogic.username";
-    String PASSWORD = "marklogic.password";
-    String DATABASE = "marklogic.database";
+    String PASSWORD = "password";
+    String DATABASE = "database";
     String AUTHENTICATION = "auth";
 
     String JOB_REPOSITORY_NAME = "jr_name";
-    String JOB_REPOSITORY_HOST = "marklogic.jobrepository.host";
-    String JOB_REPOSITORY_PORT = "marklogic.jobrepository.port";
-    String JOB_REPOSITORY_USERNAME = "marklogic.jobrepository.username";
-    String JOB_REPOSITORY_PASSWORD = "marklogic.jobrepository.password";
-    String JOB_REPOSITORY_DATABASE = "marklogic.jobrepository.database";
+    String JOB_REPOSITORY_HOST = "jr_host";
+    String JOB_REPOSITORY_PORT = "jr_port";
+    String JOB_REPOSITORY_USERNAME = "jr_username";
+    String JOB_REPOSITORY_PASSWORD = "jr_password";
+    String JOB_REPOSITORY_DATABASE = "jr_database";
     String JOB_REPOSITORY_AUTHENTICATION = "jr_auth";
 
     String LIST = "list";

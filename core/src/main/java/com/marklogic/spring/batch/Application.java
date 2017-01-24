@@ -6,6 +6,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -16,7 +17,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
@@ -57,7 +57,7 @@ public class Application extends LoggingObject implements EnvironmentAware, Appl
             Object name = spec.options().get(0);
             logger.info(name.toString() + "=" + value.toString());
         }
-        start("YourJob");
+        start("YourJob", buildJobParameters(options));
         logger.info("COMPLETE");
     }
 
@@ -145,7 +145,7 @@ public class Application extends LoggingObject implements EnvironmentAware, Appl
  * job, if not ask the context for it.
  */
     @SuppressWarnings("resource")
-    int start(String jobIdentifier) {
+    int start(String jobIdentifier, JobParameters jobParameters) throws Exception {
         Assert.state(jobLauncher != null, "A JobLauncher must be provided.  Please add one to the configuration.");
         Assert.state(jobExplorer != null,
                 "A JobExplorer must be provided for a restart or start next operation.  Please add one to the configuration.");
@@ -161,7 +161,7 @@ public class Application extends LoggingObject implements EnvironmentAware, Appl
             logger.info("FOUND");
         } catch (NoSuchJobException e) {
         }
-
+        JobExecution jobExecution = jobLauncher.run(job, jobParameters);
         return 1;
     }
 

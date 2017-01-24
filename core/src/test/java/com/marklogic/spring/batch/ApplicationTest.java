@@ -6,7 +6,7 @@ public class ApplicationTest {
 
     @Test
     public void commandLineTest() throws Exception {
-        String[] args = {"--job", "YourJob", "--marklogic.jobrepository.host", "oscar"};
+        String[] args = {"--job", "YourJob", "--jobrepository.host", "oscar", "--output_collections", "monster"};
         Application.main(args);
     }
 }
